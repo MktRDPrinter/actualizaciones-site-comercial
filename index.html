@@ -12,10 +12,10 @@
             overflow: hidden;
             width: 100%;
             height: 50px;
-            background: transparent; /* Fondo transparente para integración en Google Sites */
+            background: transparent;
         }
 
-        /* Contenedor de la marquesina */
+        /* Contenedor de la marquesina con sombra y bordes redondeados */
         #marquesina-container {
             width: 100%;
             height: 100%;
@@ -24,13 +24,14 @@
             overflow: hidden;
             white-space: nowrap;
             position: relative;
-            background: white;  /* Fondo blanco */
-            border-radius: 15px; /* Bordes redondeados */
-            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); /* Sombra sutil */
-            padding: 5px 10px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
+            padding: 10px 15px;
+            border: none;
         }
 
-        /* Contenedor del texto que se duplica para animación */
+        /* Contenedor del texto en movimiento */
         .marquesina-wrapper {
             display: flex;
             white-space: nowrap;
@@ -39,15 +40,15 @@
         /* Texto en movimiento */
         .texto {
             display: inline-block;
-            padding-right: 50px; /* Espacio entre repeticiones */
+            padding-right: 50px;
             font-size: 18px;
-            color: black; /* Texto negro */
+            color: black;
             font-family: Arial, sans-serif;
             font-weight: bold;
-            animation: scroll 20s linear infinite;
+            animation: scroll 45s linear infinite;
         }
 
-        /* Animación continua sin cortes */
+        /* Animación continua sin espacios en blanco */
         @keyframes scroll {
             from { transform: translateX(0); }
             to { transform: translateX(-50%); }
@@ -59,7 +60,7 @@
 <div id="marquesina-container">
     <div class="marquesina-wrapper">
         <div class="texto" id="marquesina">Cargando actualizaciones...</div>
-        <div class="texto" id="marquesina-clon"></div> <!-- Clon para animación continua -->
+        <div class="texto" id="marquesina-clon"></div>
     </div>
 </div>
 
@@ -72,8 +73,8 @@
             const textData = await response.text();
             const jsonData = JSON.parse(textData);
 
-            // Solucionar caracteres especiales y unir mensajes
-            let mensajes = jsonData.map(update => update.mensaje).join(" • ");
+            // Decodificar caracteres especiales correctamente
+            let mensajes = jsonData.map(update => update.mensaje.normalize("NFC")).join(" • ");
             
             // Aplicar mensajes corregidos al texto y su clon
             document.getElementById("marquesina").textContent = mensajes;
@@ -91,4 +92,3 @@
 
 </body>
 </html>
-
