@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>Actualizaciones</title>
     <style>
         /* Asegurar que todo el contenido tenga el tamaño correcto */
@@ -56,12 +56,12 @@
         try {
             const response = await fetch('https://mktrdprinter.github.io/actualizaciones-site-comercial/actualizaciones.json');
             if (!response.ok) throw new Error("No se pudo obtener el archivo JSON");
-            const data = await response.json();
 
-            // Extraer solo el texto del mensaje (sin fecha)
-            let mensajes = data.map(update => update.mensaje).join(" • ");
+            const textData = await response.text(); // Cargar como texto para evitar problemas de codificación
+            const jsonData = JSON.parse(textData);
 
-            // Insertar el texto en la marquesina
+            let mensajes = jsonData.map(update => decodeURIComponent(escape(update.mensaje))).join(" • ");
+
             document.getElementById("marquesina").textContent = mensajes;
 
         } catch (error) {
@@ -75,3 +75,4 @@
 
 </body>
 </html>
+
