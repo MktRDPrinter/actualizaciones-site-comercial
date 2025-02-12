@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Actualizaciones</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #333;
+            color: white;
+            padding: 10px;
+        }
+        #marquesina {
+            white-space: nowrap;
+            overflow: hidden;
+            position: relative;
+            background: #444;
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 18px;
+        }
+        .texto {
+            display: inline-block;
+            padding-left: 100%;
+            animation: scroll 15s linear infinite;
+        }
+        @keyframes scroll {
+            from { transform: translateX(100%); }
+            to { transform: translateX(-100%); }
+        }
+    </style>
+</head>
+<body>
+
+<div id="marquesina">
+    <span class="texto">Cargando actualizaciones...</span>
+</div>
+
+<script>
+    async function cargarActualizaciones() {
+        try {
+            const response = await fetch('https://mktrdprinter.github.io/actualizaciones-site-comercial/actualizaciones.json');
+            if (!response.ok) throw new Error("No se pudo obtener el archivo JSON");
+            const data = await response.json();
+            
+            let mensajes = data.map(update => `${update.fecha}: ${update.mensaje}`).join(" • ");
+            document.querySelector('.texto').textContent = mensajes;
+        } catch (error) {
+            document.querySelector('.texto').textContent = "No hay actualizaciones disponibles.";
+            console.error(error);
+        }
+    }
+
+    cargarActualizaciones();
+</script>
+
+</body>
+</html>
